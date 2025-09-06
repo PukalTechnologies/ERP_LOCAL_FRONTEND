@@ -16,8 +16,8 @@ export const customTableStyles = {
     },
     headCells: {
         style: {
-            backgroundColor: '#6b9080f8',
-            color: 'white',
+            backgroundColor: '#f5f5f5',
+            color: '#333333',
             fontSize: '14px',
             // borderRadius: '5px',
         },

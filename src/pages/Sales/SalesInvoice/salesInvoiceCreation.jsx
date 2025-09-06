@@ -25,6 +25,7 @@ import SalesInvoiceTaxDetails from "../SalesInvoice/taxDetails";
 import AddItemToSaleOrderCart from "../SaleOrder/addItemToCart";
 import AddProductsInSalesInvoice from "../SalesInvoice/importFromSaleOrder";
 import ExpencesOfSalesInvoice from "../SalesInvoice/manageExpences"
+import Layout from "../../../Components/Layout";
 
 
 const storage = getSessionUser().user;
@@ -98,7 +99,7 @@ const CreateSalesInvoice = ({ loadingOn, loadingOff }) => {
                     fetchLink({ address: `dataEntry/godownLocationMaster` }),
                     fetchLink({ address: `masters/defaultAccountMaster` }),
                     fetchLink({ address: `sales/stockInGodown` }),
-                    fetchLink({ address: `purchase/stockItemLedgerName?type=SALES` }),
+                    fetchLink({ address: `purchase/stockItemLedgerName?type=SALES`}),
                 ]);
 
                 const branchData = (branchResponse.success ? branchResponse.data : []).sort(
@@ -296,13 +297,15 @@ const CreateSalesInvoice = ({ loadingOn, loadingOff }) => {
                 ...invoiceInfo,
                 Product_Array: invoiceProducts,
                 Staffs_Array: staffArray,
-                Expence_Array: invoiceExpences
+                Expence_Array: invoiceExpences,
+               Created_by:Number(storage?.Id),
+               Altered_by:Number(storage?.Id)
             }
         }).then(data => {
             if (data.success) {
                 clearValues();
                 toast.success(data.message);
-                navigate('/erp/sales/invoice')
+                navigate('/sales-invoice')
             } else {
                 toast.warn(data.message)
             }
@@ -312,8 +315,7 @@ const CreateSalesInvoice = ({ loadingOn, loadingOff }) => {
     }
 
     return (
-        <>
-
+        <Layout>
             <AddItemToSaleOrderCart
                 orderProducts={invoiceProducts}
                 setOrderProducts={setInvoiceProduct}
@@ -533,7 +535,7 @@ const CreateSalesInvoice = ({ loadingOn, loadingOff }) => {
                     />
                 </CardContent>
             </Card>
-        </>
+        </Layout>
     )
 }
 

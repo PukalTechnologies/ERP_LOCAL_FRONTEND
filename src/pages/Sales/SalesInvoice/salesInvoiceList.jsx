@@ -43,7 +43,7 @@ const SaleInvoiceList = ({ loadingOn, loadingOff, AddRights=true, EditRights=tru
 
     useEffect(() => {
 
-        const otherSessionFiler = getSessionFiltersByPageId(pageID);
+        const otherSessionFiler = getSessionFiltersByPageId(2);
         const {
             Fromdate, Todate,
             Retailer = defaultFilters.Retailer,
@@ -59,10 +59,10 @@ const SaleInvoiceList = ({ loadingOn, loadingOff, AddRights=true, EditRights=tru
             SalesPerson, VoucherType, Cancel_status
         }));
 
-    }, [sessionValue, pageID]);
+    }, [sessionValue]);
 
     useEffect(() => {
-        const otherSessionFiler = getSessionFiltersByPageId(pageID);
+        const otherSessionFiler = getSessionFiltersByPageId(2);
         const {
             Fromdate, Todate,
             Retailer = defaultFilters.Retailer.value,
@@ -70,6 +70,7 @@ const SaleInvoiceList = ({ loadingOn, loadingOff, AddRights=true, EditRights=tru
             VoucherType = defaultFilters.VoucherType.value,
             Cancel_status = defaultFilters.Cancel_status
         } = otherSessionFiler;
+
 
         fetchLink({
             address: `sales/salesInvoice?
@@ -86,7 +87,7 @@ const SaleInvoiceList = ({ loadingOn, loadingOff, AddRights=true, EditRights=tru
             }
         }).catch(e => console.error(e));
 
-    }, [sessionValue, pageID, reload])
+    }, [sessionValue, reload])
     useEffect(() => {
 
         fetchLink({
@@ -170,8 +171,8 @@ const SaleInvoiceList = ({ loadingOn, loadingOff, AddRights=true, EditRights=tru
                     createCol('Do_Inv_No', 'string', 'ID'),
                     createCol('Retailer_Name', 'string', 'Customer'),
                     createCol('VoucherTypeGet', 'string', 'Voucher'),
-                    createCol('Total_Before_Tax', 'number', 'Before Tax'),
-                    createCol('Total_Tax', 'number', 'Tax'),
+                    // createCol('Total_Before_Tax', 'number', 'Before Tax'),
+                    // createCol('Total_Tax', 'number', 'Tax'),
                     createCol('Total_Invoice_value', 'number', 'Invoice Value'),
                     {
                         ColumnHeader: 'Status',
@@ -241,7 +242,7 @@ const SaleInvoiceList = ({ loadingOn, loadingOff, AddRights=true, EditRights=tru
                                 {'New'}
                             </Button>
                         )}
-                        {AddRights && (
+                        {/* {AddRights && (
                             <Tooltip title='Sync tally data'>
                                 <Button
                                     className="mx-1"
@@ -250,7 +251,7 @@ const SaleInvoiceList = ({ loadingOn, loadingOff, AddRights=true, EditRights=tru
                                     startIcon={<Sync color="primary" />}
                                 >Sync Tally</Button>
                             </Tooltip>
-                        )}
+                        )} */}
                         <Tooltip title='Filters'>
                             <IconButton
                                 size="small"
@@ -264,7 +265,7 @@ const SaleInvoiceList = ({ loadingOn, loadingOff, AddRights=true, EditRights=tru
                 // EnableSerialNumber={true}
                 isExpendable={true}
                 tableMaxHeight={550}
-                expandableComp={ExpendableComponent}
+                // expandableComp={ExpendableComponent}
             />
 
             {Object.keys(viewOrder).length > 0 && (
@@ -396,7 +397,7 @@ const SaleInvoiceList = ({ loadingOn, loadingOff, AddRights=true, EditRights=tru
                             setSessionFilters({
                                 Fromdate: filters?.Fromdate,
                                 Todate: filters.Todate,
-                                pageID,
+                                pageID:2,
                                 Retailer: filters.Retailer,
                                 CreatedBy: filters.CreatedBy,
                                 VoucherType: filters.VoucherType,

@@ -107,79 +107,53 @@ const AddProductsInSalesInvoice = ({
                         const Cgst_Amo = !IS_IGST ? gstInfo.cgst_amount : 0;
                         const Igst_Amo = IS_IGST ? gstInfo.igst_amount : 0;
 
-                     switch (key) {
-    case 'S_No': 
-        return [key, (curIndex ?? 0) + 1];
-    case 'Item_Id': 
-        return [key, cur['Item_Id'] ?? value];
-    case 'Item_Name': 
-        return [key, productMaster?.Product_Name ?? value];
-    case 'Item_Rate': 
-        return [key, toNumber(Item_Rate)];
+                        switch (key) {
+                            case 'S_No': return [key, curIndex != null ? curIndex + 1 : value];
+                            case 'Item_Id': return [key, cur['Item_Id'] ?? value];
+                            case 'Item_Name': return [key, productMaster?.Product_Name ?? value];
+                            case 'Item_Rate': return [key, toNumber(Item_Rate)];
 
-    case 'Bill_Qty': 
-        return [key, toNumber(Bill_Qty)];
-    case 'Act_Qty': 
-        return [key, toNumber(Bill_Qty)];
-    case 'Alt_Act_Qty': 
-        return [key, toNumber(Bill_Qty)];
+                            case 'Bill_Qty': return [key, toNumber(Bill_Qty)];
+                            case 'Act_Qty': return [key, toNumber(Bill_Qty)];
+                            case 'Alt_Act_Qty': return [key, toNumber(Bill_Qty)];
 
-    case 'Amount': 
-        return [key, Amount];
-    case 'HSN_Code': 
-        return [key, productMaster.HSN_Code ?? value];
+                            case 'Amount': return [key, Amount];
+                            case 'HSN_Code': return [key, productMaster.HSN_Code ?? value];
 
-    case 'Unit_Id': 
-        return [key, cur['Unit_Id'] ?? value];
-    case 'Act_unit_Id': 
-        return [key, cur['Unit_Id'] ?? value];
-    case 'Alt_Act_Unit_Id': 
-        return [key, cur['Unit_Id'] ?? value];
-    case 'Unit_Name': 
-        return [key, cur['Units'] ?? value];
+                            case 'Unit_Id': return [key, cur['Unit_Id'] ?? value];
+                            case 'Act_unit_Id': return [key, cur['Unit_Id'] ?? value];
+                            case 'Alt_Act_Unit_Id': return [key, cur['Unit_Id'] ?? value];
+                            case 'Unit_Name': return [key, cur['Units'] ?? value];
+                            case 'GoDown_Id': {
+                                const isValidGodown = checkIsNumber(godownDetails?.Godown_Id);
+                                const isValidItem = checkIsNumber(godownDetails?.Item_Id);
+                                const isSameItem = isEqualNumber(cur?.Item_Id, godownDetails?.Item_Id);
+                                const oldGodown = oldData.find(
+                                    fndOld => isEqualNumber(fndOld.Item_Id, cur?.Item_Id)
+                                )?.GoDown_Id
 
-    case 'GoDown_Id': {
-        const isValidGodown = checkIsNumber(godownDetails?.Godown_Id);
-        const isValidItem = checkIsNumber(godownDetails?.Item_Id);
-        const isSameItem = isEqualNumber(cur?.Item_Id, godownDetails?.Item_Id);
-        const oldGodown = oldData.find(
-            fndOld => isEqualNumber(fndOld.Item_Id, cur?.Item_Id)
-        )?.GoDown_Id;
+                                const newValue = (isValidGodown && isValidItem && isSameItem)
+                                    ? godownDetails.Godown_Id
+                                    : checkIsNumber(oldGodown) ? oldGodown : value;
 
-        const newValue = (isValidGodown && isValidItem && isSameItem)
-            ? godownDetails.Godown_Id
-            : checkIsNumber(oldGodown) ? oldGodown : value;
+                                return [key, newValue];
+                            }
 
-        return [key, newValue];
-    }
+                            case 'Taxable_Rate': return [key, itemRateGst.base_amount]
+                            case 'Total_Qty': return [key, toNumber(Bill_Qty)]
+                            case 'Taxble': return [key, isTaxable ? 1 : 0]
+                            case 'Taxable_Amount': return [key, gstInfo.base_amount]
+                            case 'Tax_Rate': return [key, gstPercentage]
+                            case 'Cgst':
+                            case 'Sgst': return [key, cgstPer ?? 0]
+                            case 'Cgst_Amo':
+                            case 'Sgst_Amo': return [key, isNotTaxableBill ? 0 : Cgst_Amo]
+                            case 'Igst': return [key, igstPer ?? 0]
+                            case 'Igst_Amo': return [key, isNotTaxableBill ? 0 : Igst_Amo]
+                            case 'Final_Amo': return [key, gstInfo.with_tax]
 
-    case 'Taxable_Rate': 
-        return [key, itemRateGst.base_amount];
-    case 'Total_Qty': 
-        return [key, toNumber(Bill_Qty)];
-    case 'Taxble': 
-        return [key, isTaxable ? 1 : 0];
-    case 'Taxable_Amount': 
-        return [key, gstInfo.base_amount];
-    case 'Tax_Rate': 
-        return [key, gstPercentage];
-    case 'Cgst':
-    case 'Sgst': 
-        return [key, cgstPer ?? 0];
-    case 'Cgst_Amo':
-    case 'Sgst_Amo': 
-        return [key, isNotTaxableBill ? 0 : Cgst_Amo];
-    case 'Igst': 
-        return [key, igstPer ?? 0];
-    case 'Igst_Amo': 
-        return [key, isNotTaxableBill ? 0 : Igst_Amo];
-    case 'Final_Amo': 
-        return [key, gstInfo.with_tax];
-
-    default: 
-        return [key, value];
-}
-
+                            default: return [key, value]
+                        }
                     })
                 )
             ))

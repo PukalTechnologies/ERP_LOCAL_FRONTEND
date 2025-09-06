@@ -158,3 +158,10 @@ label {
     border-color: #66afe9;
     background-color: #eaf4fe;
 }
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto; 
+}

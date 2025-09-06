@@ -1,5 +1,4 @@
 import { useState } from "react";
-import axios from "axios";
 import { toast } from "react-toastify";
 import {
   Box,
@@ -9,7 +8,7 @@ import {
   CircularProgress,
   Paper,
 } from "@mui/material";
-import "react-toastify/dist/ReactToastify.css";
+import { fetchLink } from "../Components/fetchComponent";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -21,48 +20,53 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://192.168.3.113:5000/api/login", {
-        username,
-        password,
+      const res = await fetchLink({
+        address: "login",
+        method: "POST",
+        bodyData: { username, password },
+        loadingOn: () => setLoading(true),
+        loadingOff: () => setLoading(false),
       });
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-      toast.success("Login successful!");
-      window.location.href = "/dashboard";
+
+      if (res?.token) {
+        localStorage.setItem("token", res.token);
+        localStorage.setItem("user", JSON.stringify(res.user));
+        toast.success("Login successful!");
+        window.location.href = "/dashboard";
+      } else {
+        toast.error(res?.message || "Login failed");
+      }
     } catch (err) {
-      toast.error(err.response?.data?.message || "Login failed");
-    } finally {
-      setLoading(false);
+      toast.error("Something went wrong");
     }
   };
 
   return (
-   <Box
-  sx={{
-    backgroundImage: "url('/images/glass-building.jpg')",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    height: "100vh",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    p: 2,
-  }}
->
-     <Paper
-  elevation={8}
-  sx={{
-    p: 4,
-    width: "400px",
-    textAlign: "center",
-    background: "rgba(0, 0, 0, 0.6)", 
-    backdropFilter: "blur(10px)",     
-    borderRadius: "16px",
-    boxShadow: "0 4px 30px rgba(0, 0, 0, 0.5)",
-    color: "white",
-  }}
->
-
+    <Box
+      sx={{
+        backgroundImage: "url('/images/glass-building.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        height: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        p: 2,
+      }}
+    >
+      <Paper
+        elevation={8}
+        sx={{
+          p: 4,
+          width: "400px",
+          textAlign: "center",
+          background: "rgba(0, 0, 0, 0.6)",
+          backdropFilter: "blur(10px)",
+          borderRadius: "16px",
+          boxShadow: "0 4px 30px rgba(0, 0, 0, 0.5)",
+          color: "white",
+        }}
+      >
         {/* Logo & Title */}
         <Box mb={2}>
           <img

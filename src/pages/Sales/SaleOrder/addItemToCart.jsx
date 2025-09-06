@@ -49,7 +49,6 @@ const AddItemToSaleOrderCart = ({
     }
 
     const handleProductInputChange = () => {
-
         setOrderProducts(pre => {
             const existingProducts = pre.filter(ordered => !isEqualNumber(ordered.Item_Id, productDetails.Item_Id));
 
@@ -120,292 +119,305 @@ const AddItemToSaleOrderCart = ({
                         <div className="row pb-5">
 
                             {/* brand */}
-                            <div className="col-6 p-2">
-                                <label>Brand</label>
-                                <Select
-                                    value={{ value: productDetails.BrandID, label: productDetails.Brand }}
-                                    onChange={(e) => setProductDetails(pre => ({ ...pre, BrandID: e.value, Brand: e.label }))}
-                                    options={[
-                                        { value: '', label: 'select', isDisabled: true },
-                                        ...brands.map(obj => ({ value: obj?.Brand, label: obj?.Brand_Name }))
-                                    ]}
-                                    styles={customSelectStyles}
-                                    menuPortalTarget={document.body}
-                                    isSearchable={true}
-                                    placeholder={"Select Brand"}
-                                    maxMenuHeight={200}
-                                />
+                            <div className="col-md-6 col-sm-12 p-2">
+                                <div className="form-group">
+                                    <label className="form-label">Brand</label>
+                                    <Select
+                                        value={{ value: productDetails.BrandID, label: productDetails.Brand }}
+                                        onChange={(e) => setProductDetails(pre => ({ ...pre, BrandID: e.value, Brand: e.label }))}
+                                        options={[
+                                            { value: '', label: 'select', isDisabled: true },
+                                            ...brands.map(obj => ({ value: obj?.Brand, label: obj?.Brand_Name }))
+                                        ]}
+                                        styles={customSelectStyles}
+                                        menuPortalTarget={document.body}
+                                        isSearchable={true}
+                                        placeholder={"Select Brand"}
+                                        maxMenuHeight={200}
+                                    />
+                                </div>
                             </div>
 
                             {/* group */}
-                            <div className="col-6 p-2">
-                                <label>Group</label>
-                                <Select
-                                    value={{ value: productDetails.GroupID, label: productDetails.Group }}
-                                    onChange={(e) =>
-                                        setProductDetails((pre) => ({ ...pre, GroupID: e.value, Group: e.label }))
-                                    }
-                                    options={[
-                                        { value: '', label: 'select', isDisabled: true },
-                                        ...products
-                                            .filter(
-                                                (pro) =>
-                                                    productDetails.BrandID
-                                                        ? isEqualNumber(pro.Brand, productDetails.BrandID)
-                                                        : true
-                                            )
-                                            .reduce((acc, pro) => {
-                                                if (
-                                                    !acc.some((grp) => grp.value === pro.Product_Group)
-                                                ) {
-                                                    acc.push({
-                                                        value: pro.Product_Group,
-                                                        label: pro.Pro_Group,
-                                                    });
-                                                }
-                                                return acc;
-                                            }, []),
-                                    ]}
-                                    styles={customSelectStyles}
-                                    menuPortalTarget={document.body}
-                                    isSearchable={true}
-                                    placeholder={"Select Group"}
-                                    maxMenuHeight={200}
-                                />
+                            <div className="col-md-6 col-sm-12 p-2">
+                                <div className="form-group">
+                                    <label className="form-label">Group</label>
+                                    <Select
+                                        value={{ value: productDetails.GroupID, label: productDetails.Group }}
+                                        onChange={(e) =>
+                                            setProductDetails((pre) => ({ ...pre, GroupID: e.value, Group: e.label }))
+                                        }
+                                        options={[
+                                            { value: '', label: 'select', isDisabled: true },
+                                            ...products
+                                                .filter(
+                                                    (pro) =>
+                                                        productDetails.BrandID
+                                                            ? isEqualNumber(pro.Brand, productDetails.BrandID)
+                                                            : true
+                                                )
+                                                .reduce((acc, pro) => {
+                                                    if (
+                                                        !acc.some((grp) => grp.value === pro.Product_Group)
+                                                    ) {
+                                                        acc.push({
+                                                            value: pro.Product_Group,
+                                                            label: pro.Pro_Group,
+                                                        });
+                                                    }
+                                                    return acc;
+                                                }, []),
+                                        ]}
+                                        styles={customSelectStyles}
+                                        menuPortalTarget={document.body}
+                                        isSearchable={true}
+                                        placeholder={"Select Group"}
+                                        maxMenuHeight={200}
+                                    />
+                                </div>
                             </div>
 
                             {/* item name */}
                             <div className={
-                                Object.hasOwn(productDetails, 'GoDown_Id') ? 'col-md-8 p-2' : "col-12 p-2"
+                                Object.hasOwn(productDetails, 'GoDown_Id') ? 'col-md-8 col-sm-12 p-2' : "col-12 p-2"
                             }>
-                                <label>Item Name <RequiredStar /></label>
-                                <Select
-                                    value={{
-                                        value: productDetails.Item_Id,
-                                        label: (
-                                            findProductDetails(productDetails.Item_Id)?.Product_Name
-                                        )
-                                    }}
-                                    isDisabled={checkIsNumber(productDetails.Pre_Id)}
-                                    menuPortalTarget={document.body}
-                                    onChange={e => {
-                                        const productInfo = findProductDetails(e.value);
-                                        setProductDetails(pre => ({
-                                            ...pre,
+                                <div className="form-group">
+                                    <label className="form-label">Item Name <RequiredStar /></label>
+                                    <Select
+                                        value={{
+                                            value: productDetails.Item_Id,
+                                            label: (
+                                                findProductDetails(productDetails.Item_Id)?.Product_Name
+                                            )
+                                        }}
+                                        isDisabled={checkIsNumber(productDetails.Pre_Id)}
+                                        menuPortalTarget={document.body}
+                                        onChange={e => {
+                                            const productInfo = findProductDetails(e.value);
+                                            setProductDetails(pre => ({
+                                                ...pre,
 
-                                            Group: productInfo.Pro_Group ?? pre.Group,
-                                            GroupID: productInfo.Product_Group ?? pre.GroupID,
-                                            Brand: productInfo.Brand_Name ?? pre.Brand,
-                                            BrandID: productInfo.Brand ?? pre.BrandID,
+                                                Group: productInfo.Pro_Group ?? pre.Group,
+                                                GroupID: productInfo.Product_Group ?? pre.GroupID,
+                                                Brand: productInfo.Brand_Name ?? pre.Brand,
+                                                BrandID: productInfo.Brand ?? pre.BrandID,
 
-                                            Item_Id: e.value,
-                                            Item_Rate: productInfo.Item_Rate ?? 0,
-                                            Bill_Qty: 0,
-                                            Amount: 0,
-                                            Unit_Id: productInfo.UOM_Id ?? pre.Unit_Id,
-                                            Unit_Name: productInfo.Units ?? pre.Unit_Name,
-                                            HSN_Code: productInfo?.HSN_Code
-                                        }));
-                                    }}
-                                    options={[
-                                        { value: '', label: 'select', isDisabled: true },
-                                        ...[
-                                            ...products
-                                                .filter(pro => productDetails.BrandID ? isEqualNumber(pro.Brand, productDetails.BrandID) : true)
-                                                .filter(pro => productDetails.GroupID ? isEqualNumber(pro.Product_Group, productDetails.GroupID) : true)
-                                        ].map(obj => ({
-                                            value: obj?.Product_Id,
-                                            label: obj?.Product_Name,
-                                            isDisabled: (
-                                                orderProducts.findIndex(ind => isEqualNumber(
-                                                    ind?.Item_Id, obj?.Product_Id
-                                                ))
-                                            ) === -1 ? false : true
-                                        }))
-                                    ]}
-                                    styles={customSelectStyles}
-                                    isSearchable={true}
-                                    required
-                                    placeholder={"Select Product"}
-                                    maxMenuHeight={200}
-                                />
+                                                Item_Id: e.value,
+                                                Item_Rate: productInfo.Item_Rate ?? 0,
+                                                Bill_Qty: 0,
+                                                Amount: 0,
+                                                Unit_Id: productInfo.UOM_Id ?? pre.Unit_Id,
+                                                Unit_Name: productInfo.Units ?? pre.Unit_Name,
+                                                HSN_Code: productInfo?.HSN_Code
+                                            }));
+                                        }}
+                                        options={[
+                                            { value: '', label: 'select', isDisabled: true },
+                                            ...[
+                                                ...products
+                                                    .filter(pro => productDetails.BrandID ? isEqualNumber(pro.Brand, productDetails.BrandID) : true)
+                                                    .filter(pro => productDetails.GroupID ? isEqualNumber(pro.Product_Group, productDetails.GroupID) : true)
+                                            ].map(obj => ({
+                                                value: obj?.Product_Id,
+                                                label: obj?.Product_Name,
+                                                isDisabled: (
+                                                    orderProducts.findIndex(ind => isEqualNumber(
+                                                        ind?.Item_Id, obj?.Product_Id
+                                                    ))
+                                                ) === -1 ? false : true
+                                            }))
+                                        ]}
+                                        styles={customSelectStyles}
+                                        isSearchable={true}
+                                        required
+                                        placeholder={"Select Product"}
+                                        maxMenuHeight={200}
+                                    />
+                                </div>
                             </div>
 
                             {/* godown  */}
                             {Object.hasOwn(productDetails, 'GoDown_Id') && (
-                                <div className="col-md-4 p-2">
-                                    <label>Godown</label>
-                                    <Select
-                                        value={{
-                                            value: productDetails?.GoDown_Id,
-                                            label: godowns.find(g => isEqualNumber(g.Godown_Id, productDetails?.GoDown_Id))?.Godown_Name || ''
-                                        }}
-                                        onChange={(e) => setProductDetails(pre => ({ ...pre, GoDown_Id: e.value }))}
-                                        options={[
-                                            { value: '', label: 'select', isDisabled: true },
-                                            {
-                                                label: 'Stock-Available-Godowns',
-                                                options: toArray(godowns).filter(fil => {
-                                                    const stockList = toArray(stockInGodown);
+                                <div className="col-md-4 col-sm-12 p-2">
+                                    <div className="form-group">
+                                        <label className="form-label">Godown</label>
+                                        <Select
+                                            value={{
+                                                value: productDetails?.GoDown_Id,
+                                                label: godowns.find(g => isEqualNumber(g.Godown_Id, productDetails?.GoDown_Id))?.Godown_Name || ''
+                                            }}
+                                            onChange={(e) => setProductDetails(pre => ({ ...pre, GoDown_Id: e.value }))}
+                                            options={[
+                                                { value: '', label: 'select', isDisabled: true },
+                                                {
+                                                    label: 'Stock-Available-Godowns',
+                                                    options: toArray(godowns).filter(fil => {
+                                                        const stockList = toArray(stockInGodown);
 
-                                                    if (stockList.length === 0) return false;
+                                                        if (stockList.length === 0) return false;
 
-                                                    return stockList.some(
-                                                        fnd => (
-                                                            isEqualNumber(fnd?.Godown_Id, fil?.Godown_Id)
-                                                            && isEqualNumber(productDetails?.Item_Id, fnd?.Product_Id)
+                                                        return stockList.some(
+                                                            fnd => (
+                                                                isEqualNumber(fnd?.Godown_Id, fil?.Godown_Id)
+                                                                && isEqualNumber(productDetails?.Item_Id, fnd?.Product_Id)
+                                                            )
                                                         )
-                                                    )
-                                                }).map(obj => ({
-                                                    value: obj?.Godown_Id,
-                                                    label: obj?.Godown_Name
-                                                        + " (Bal: "
-                                                        + validStockValue(productDetails?.Item_Id, obj?.Godown_Id, stockInGodown)
-                                                        + ")"
-                                                }))
-                                            },
-                                            {
-                                                label: 'Other Godowns',
-                                                options: toArray(godowns).filter(fil => {
-                                                    const stockList = toArray(stockInGodown);
+                                                    }).map(obj => ({
+                                                        value: obj?.Godown_Id,
+                                                        label: obj?.Godown_Name
+                                                            + " (Bal: "
+                                                            + validStockValue(productDetails?.Item_Id, obj?.Godown_Id, stockInGodown)
+                                                            + ")"
+                                                    }))
+                                                },
+                                                {
+                                                    label: 'Other Godowns',
+                                                    options: toArray(godowns).filter(fil => {
+                                                        const stockList = toArray(stockInGodown);
 
-                                                    if (stockList.length === 0) return true;
+                                                        if (stockList.length === 0) return true;
 
-                                                    return !stockList.some(fnd =>
-                                                        isEqualNumber(fnd?.Godown_Id, fil?.Godown_Id) &&
-                                                        isEqualNumber(productDetails?.Item_Id, fnd?.Product_Id)
-                                                    );
-                                                }).map(obj => ({
-                                                    value: obj?.Godown_Id,
-                                                    label: obj?.Godown_Name
-                                                }))
-                                            }
-                                        ]}
-                                        styles={customSelectStyles}
-                                        isDisabled={!checkIsNumber(productDetails?.Item_Id)}
-                                        menuPortalTarget={document.body}
-                                        isSearchable={true}
-                                        placeholder={"Select Godown"}
-                                        // maxMenuHeight={200}  
-                                    />
+                                                        return !stockList.some(fnd =>
+                                                            isEqualNumber(fnd?.Godown_Id, fil?.Godown_Id) &&
+                                                            isEqualNumber(productDetails?.Item_Id, fnd?.Product_Id)
+                                                        );
+                                                    }).map(obj => ({
+                                                        value: obj?.Godown_Id,
+                                                        label: obj?.Godown_Name
+                                                    }))
+                                                }
+                                            ]}
+                                            styles={customSelectStyles}
+                                            isDisabled={!checkIsNumber(productDetails?.Item_Id)}
+                                            menuPortalTarget={document.body}
+                                            isSearchable={true}
+                                            placeholder={"Select Godown"}
+                                        />
+                                    </div>
                                 </div>
                             )}
 
-                            {/* quantity */}
-                            <div className="col-lg-4 col-md-6 p-2">
-                                <label>Quantity <RequiredStar /></label>
-                                <input
-                                    required
-                                    value={productDetails.Bill_Qty ? productDetails.Bill_Qty : ''}
-                                    onInput={onlynum}
-                                    disabled={!checkIsNumber(productDetails.Item_Id)}
-                                    onChange={e => {
-                                        if (productDetails.Item_Rate) {
-                                            setProductDetails(pre => ({
-                                                ...pre,
-                                                Amount: Multiplication(productDetails.Item_Rate, e.target.value),
-                                                Bill_Qty: e.target.value,
-                                            }))
-                                        } else if (productDetails.Amount) {
-                                            setProductDetails(pre => ({
-                                                ...pre,
-                                                Item_Rate: Division(pre.Amount, e.target.value),
-                                                Bill_Qty: e.target.value,
-                                            }))
-                                        } else {
-                                            setProductDetails(pre => ({
-                                                ...pre,
-                                                Bill_Qty: e.target.value,
-                                            }));
-                                        }
-                                    }}
-                                    className="cus-inpt"
-                                    min={1}
-                                />
+                            {/* 3rd Row: Quantity, Actual Quantity, Rate */}
+                            <div className="col-md-4 col-sm-6 p-2">
+                                <div className="form-group">
+                                    <label className="form-label">Quantity <RequiredStar /></label>
+                                    <input
+                                        required
+                                        value={productDetails.Bill_Qty ? productDetails.Bill_Qty : ''}
+                                        onInput={onlynum}
+                                        disabled={!checkIsNumber(productDetails.Item_Id)}
+                                        onChange={e => {
+                                            if (productDetails.Item_Rate) {
+                                                setProductDetails(pre => ({
+                                                    ...pre,
+                                                    Amount: Multiplication(productDetails.Item_Rate, e.target.value),
+                                                    Bill_Qty: e.target.value,
+                                                }))
+                                            } else if (productDetails.Amount) {
+                                                setProductDetails(pre => ({
+                                                    ...pre,
+                                                    Item_Rate: Division(pre.Amount, e.target.value),
+                                                    Bill_Qty: e.target.value,
+                                                }))
+                                            } else {
+                                                setProductDetails(pre => ({
+                                                    ...pre,
+                                                    Bill_Qty: e.target.value,
+                                                }));
+                                            }
+                                        }}
+                                        className="form-control"
+                                        min={1}
+                                    />
+                                </div>
                             </div>
 
                             {Object.hasOwn(productDetails, 'Act_Qty') && (
-                                <div className="col-lg-4 col-md-6 p-2">
-                                    <label>Actual Quantity </label>
+                                <div className="col-md-4 col-sm-6 p-2">
+                                    <div className="form-group">
+                                        <label className="form-label">Actual Quantity</label>
+                                        <input
+                                            value={productDetails.Act_Qty ? productDetails.Act_Qty : ''}
+                                            onInput={onlynum}
+                                            disabled={!checkIsNumber(productDetails.Item_Id)}
+                                            onChange={e => setProductDetails(pre => ({
+                                                ...pre,
+                                                Act_Qty: e.target.value,
+                                            }))}
+                                            className="form-control"
+                                        />
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="col-md-4 col-sm-6 p-2">
+                                <div className="form-group">
+                                    <label className="form-label">Rate</label>
                                     <input
-                                        value={productDetails.Act_Qty ? productDetails.Act_Qty : ''}
+                                        value={productDetails.Item_Rate ? productDetails.Item_Rate : ''}
                                         onInput={onlynum}
                                         disabled={!checkIsNumber(productDetails.Item_Id)}
                                         onChange={e => setProductDetails(pre => ({
                                             ...pre,
-                                            Act_Qty: e.target.value,
+                                            Item_Rate: e.target.value,
+                                            Amount: pre.Bill_Qty ? Multiplication(e.target.value, pre.Bill_Qty) : pre.Amount
                                         }))}
                                         required
-                                        className="cus-inpt"
+                                        className="form-control"
                                     />
                                 </div>
-                            )}
-
-                            {/* Rate */}
-                            <div className="col-lg-4 col-md-6 p-2">
-                                <label>Rate </label>
-                                <input
-                                    value={productDetails.Item_Rate ? productDetails.Item_Rate : ''}
-                                    onInput={onlynum}
-                                    disabled={!checkIsNumber(productDetails.Item_Id)}
-                                    onChange={e => setProductDetails(pre => ({
-                                        ...pre,
-                                        Item_Rate: e.target.value,
-                                        Amount: pre.Bill_Qty ? Multiplication(e.target.value, pre.Bill_Qty) : pre.Amount
-                                    }))}
-                                    required
-                                    className="cus-inpt"
-                                />
                             </div>
 
-                            {/* UOM */}
-                            <div className="col-lg-4 col-md-6 p-2">
-                                <label>UOM</label>
-                                <select
-                                    value={
-                                        Object.hasOwn(productDetails, 'UOM') ? productDetails.UOM : 
-                                        Object.hasOwn(productDetails, 'Unit_Id') ? productDetails.Unit_Id : '' 
-                                    }
-                                    onChange={e => {
-                                        const selectedIndex = e.target.selectedIndex;
-                                        const label = e.target.options[selectedIndex].text;
-                                        const value = e.target.value;
-                                        setProductDetails(pre => ({ 
-                                            ...pre, 
-                                            UOM: value, 
-                                            Unit_Id: value, 
-                                            Units: label,
-                                            Unit_Name: label, 
-                                        }));
-                                    }}
-                                    className="cus-inpt"
-                                    disabled={!checkIsNumber(productDetails.Item_Id)}
-                                >
-                                    <option value="" disabled>select</option>
-                                    {uom.map((o, i) => (
-                                        <option value={o.Unit_Id} key={i} >{o.Units}</option>
-                                    ))}
-                                </select>
+                            {/* 4th Row: UOM, Amount */}
+                            <div className="col-md-4 col-sm-6 p-2">
+                                <div className="form-group">
+                                    <label className="form-label">UOM</label>
+                                    <select
+                                        value={
+                                            Object.hasOwn(productDetails, 'UOM') ? productDetails.UOM : 
+                                            Object.hasOwn(productDetails, 'Unit_Id') ? productDetails.Unit_Id : '' 
+                                        }
+                                        onChange={e => {
+                                            const selectedIndex = e.target.selectedIndex;
+                                            const label = e.target.options[selectedIndex].text;
+                                            const value = e.target.value;
+                                            setProductDetails(pre => ({ 
+                                                ...pre, 
+                                                UOM: value, 
+                                                Unit_Id: value, 
+                                                Units: label,
+                                                Unit_Name: label, 
+                                            }));
+                                        }}
+                                        className="form-control"
+                                        disabled={!checkIsNumber(productDetails.Item_Id)}
+                                    >
+                                        <option value="" disabled>select</option>
+                                        {uom.map((o, i) => (
+                                            <option value={o.Unit_Id} key={i} >{o.Units}</option>
+                                        ))}
+                                    </select>
+                                </div>
                             </div>
 
-                            {/* Amount */}
-                            <div className="col-md-6 p-2">
-                                <label>Amount</label>
-                                <input
-                                    required
-                                    value={productDetails.Amount ? productDetails.Amount : ''}
-                                    onInput={onlynum}
-                                    disabled={!checkIsNumber(productDetails.Item_Id)}
-                                    onChange={e => setProductDetails(pre => ({
-                                        ...pre,
-                                        Amount: e.target.value,
-                                        Item_Rate: pre.Bill_Qty ? Division(e.target.value, pre.Bill_Qty) : pre.Item_Rate
-                                    }))}
-                                    className="cus-inpt"
-                                    min={1}
-                                />
+                            <div className="col-md-4 col-sm-6 p-2">
+                                <div className="form-group">
+                                    <label className="form-label">Amount</label>
+                                    <input
+                                        required
+                                        value={productDetails.Amount ? productDetails.Amount : ''}
+                                        onInput={onlynum}
+                                        disabled={!checkIsNumber(productDetails.Item_Id)}
+                                        onChange={e => setProductDetails(pre => ({
+                                            ...pre,
+                                            Amount: e.target.value,
+                                            Item_Rate: pre.Bill_Qty ? Division(e.target.value, pre.Bill_Qty) : pre.Item_Rate
+                                        }))}
+                                        className="form-control"
+                                        min={1}
+                                    />
+                                </div>
                             </div>
-
 
                         </div>
 

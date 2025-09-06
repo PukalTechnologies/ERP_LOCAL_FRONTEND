@@ -34,6 +34,7 @@ import { fetchLink } from "../../../Components/fetchComponent";
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import * as XLSX from "xlsx";
 import Layout from "../../../Components/Layout";
+import FilterableTable from "../../../Components/filterableTable2";
 
 const RetailersMaster = ({ loadingOn, loadingOff }) => {
     const storage = JSON.parse(localStorage.getItem("user"));
